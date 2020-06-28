@@ -3,7 +3,7 @@ package com.prerna.retail
 import org.apache.spark.sql.SparkSession
 import java.lang.Float
 
-object ProductSales {
+object StoreSales {
   def main (args : Array[String]){
     
     //check if the number of arguments are correct
@@ -14,18 +14,18 @@ object ProductSales {
     
     val spark = SparkSession
             .builder
-            .appName("ProductSales")
+            .appName("StoreSales")
             .getOrCreate()
             
     val data = spark.read.textFile(args(0)).rdd
     
     val result = data.map(line => {
       val tokens = line.split("\\t")
-      (tokens(3), Float.parseFloat(tokens(4)))
+      (tokens(2), Float.parseFloat(tokens(4)))
     })
     .reduceByKey(_+_)
     
-    //Prod_category Sales-Val
+    //Store_category Sales-Val
     result.saveAsTextFile(args(1))
     
     spark.stop()
